@@ -174,4 +174,15 @@ When a user triggers a scroll command and the scroll completes, the browser hand
 #### Extra thoughts/Possible extensions
 * **Multiple elements announcement**: We could consider extending the subscription with some parameter to include only the first "active" element in the announcement or all of the visible ones.
 * **Combining aria-live text to announcement**: We could consider taking the text inside the `aria-live` element to concat it with a browser-genereted announcement.
-* **Extending scroll-state queries**: Instead of this proposal, extend scroll-state queries/introduce new event type to get the "active" element[s] in JS that would allow more flexibility to authors.
+* **A `scrollactivechange` event**: Instead of a fully declarative attribute that bypasses the DOM, the platform could expose the `:target-current` heuristics directly to JavaScript via a new event (e.g., `scrollactivechange`). This would apply to all scrollers, not just those using scroll-snap.
+```JavaScript
+gallery.addEventListener('scrollactivechange', (e) => {
+  // The browser natively calculates the most prominent item
+  const activeItem = e.activeElements[0]; 
+
+  // Developer has full flexibility to add formatting/context
+  announcer.textContent = `Image ${activeItem.dataset.index} of 10: ${activeItem.alt}`;
+});
+```
+This abandons the zero JS idea of the proposal and goes away from the pure AX solution, but gives more control over the formatting of an announcement.
+> Probably we could even combine the two? E.g. use `aria-live-source` if no flexibility is needed and use the event one otherwise?
