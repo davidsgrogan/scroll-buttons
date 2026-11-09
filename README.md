@@ -1,5 +1,7 @@
 # Proposal: add declarative scroll commands to [HTMLButtonElement](https://html.spec.whatwg.org/multipage/form-elements.html#attr-button-command)
 
+> This repository is a fork of [Daniil Sakhapov's original explainer](https://github.com/danielsakhapov/declarative-scroll-commands-for-html-explainer).
+
 ### Summary
 
 This proposal introduces a set of new `command` values for the `HTMLButtonElement` to declaratively control the scroll position of a target element. This allows authors to create custom scrolling UI (e.g., for carousels or galleries) without requiring JavaScript, improving accessibility and simplifying implementation.
