@@ -125,10 +125,6 @@ One of the primary benefits of this declarative approach is automatic state sync
 
 Logical commands (page-inline-start, page-block-end, etc.) ensure that scrolling directions automatically adapt to the document's writing mode. In a Right-to-Left (RTL) context, page-inline-end will correctly scroll to the left, ensuring that "Next" remains semantically and functionally accurate without requiring manual direction logic from the author.
 
-#### Handling multi-axis scrolling
-
-In complex interfaces where a single container supports both horizontal and vertical scrolling, the AT announcement must distinguish between axes to prevent user confusion. When multiple scroll commands target the same commandfor ID, the browser should include the axis in the announcement.A page-inline-end button would be announced as "Next page, horizontal, [Container Name], button."A page-block-end button would be announced as "Next page, vertical, [Container Name], button."
-
 ## Accessibility & screen reader announcements
 When introducing declarative scroll commands, a key accessibility challenge arises: how do we announce newly visible content to screen reader users without requiring JavaScript? Currently, moving the visual viewport via scrolling does not automatically trigger an announcement. If a user clicks a `command="page-inline-end"` button on a carousel, the visual state changes, but the screen reader remains silent unless focus is explicitly moved.
 
