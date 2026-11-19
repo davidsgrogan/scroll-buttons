@@ -116,12 +116,22 @@ In complex interfaces where a single container supports both horizontal and vert
 
 ## Accessibility & screen reader announcements
 
-The labels on scroll buttons are very likely to give non-visual screen reader users the impression that activating the button will change the content that is available to them. However, the content in the target scroll container is always in the accessibility tree, so activating a scroll button will not create any changes that could be perceived by a non-visual screen reader user. Users will generally expect changes and will thus spend time attempting to discover changes when there are none to discover. This may leave the user with the impression that the page is defective.
+Accurate, valid scroll button labels are very likely to give non-visual screen reader users the impression that activating the button will change the content that is available to them. However, the content in the target scroll container is always in the accessibility tree, so activating a scroll button will not create any changes that could be perceived by a non-visual screen reader user. Users will generally expect changes and will thus spend time attempting to discover changes when there are none to discover. This may leave the user with the impression that the page is defective.
 
 A button that is functioning correctly but appears to be broken creates serious user experience problems. Thus, it is important to help non-visual users understand what activating the button is doing and what it is not doing. Helping non-visual users understand that the content available to them is not changing as a result of activating the button should reduce the likelihood that users will think the page is broken.
 
-The proposal for achieving this is to provide an informative announcement via the ariaNotify API when a scroll button is activated. The objective of the announcement is to help non-visual users understand what has changed, and very importantly, what has not changed. For example, if page-inline-end is executed in an RTL language, the announcement could be:
+The proposal for achieving this is to provide an informative announcement via the ariaNotify API when a scroll button is activated. The objective of the announcement is to help non-visual users understand what has changed, and very importantly, what has not changed. 
 
->Visible horizontal scroll [of CONTAINER_NAME CONTAINER_ROLE] changed to x%. The screen reader view did not change.
+The format of the announcement string is:
+>Visible [horizontal|vertical] scroll [of CONTAINER_NAME CONTAINER_ROLE] changed to x%. The screen reader view did not change.
 
-If the target container does not have a name and role, the information in brackets would be omitted.
+If the target container does not have a name and role, that information would be omitted.
+
+For example, a page-inline-end command for a target with an accessible name "Document Preview" that changed the vertical scroll position to 25% would generate the following announcement:
+
+>Visible vertical scroll of Document Preview region changed to 25%. The screen reader view did not change.
+
+In the event that an author needs to override this default behavior, authors would have two ways of telling browsers not to make the automatic announcements:
+
+1. Declare `aria-live="off"` on the button.
+2. Declare `aria-live` with any value on the scroll container.
