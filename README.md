@@ -106,15 +106,7 @@ One of the primary benefits of this declarative approach is automatic state sync
 * Focus preservation: The use of aria-disabled is required over the HTML disabled attribute to ensure the button remains in the Tab order. If the button were strictly disabled via the HTML attribute, a keyboard user would lose their focus point upon reaching the end of the scrollable region, causing the focus to reset to the top of the document.
 * Styling via attribute selectors: Authors can style these states using attribute selectors (e.g., button[aria-disabled="true"]) to provide visual parity with the :disabled pseudo-class while maintaining accessibility.
 
-#### Internationalization & writing modes
-
-Logical commands (page-inline-start, page-block-end, etc.) ensure that scrolling directions automatically adapt to the document's writing mode. In a Right-to-Left (RTL) context, page-inline-end will correctly scroll to the left, ensuring that "Next" remains semantically and functionally accurate without requiring manual direction logic from the author.
-
-#### Handling multi-axis scrolling
-
-In complex interfaces where a single container supports both horizontal and vertical scrolling, the AT announcement must distinguish between axes to prevent user confusion. When multiple scroll commands target the same commandfor ID, the browser should include the axis in the announcement.A page-inline-end button would be announced as "Next page, horizontal, [Container Name], button."A page-block-end button would be announced as "Next page, vertical, [Container Name], button."
-
-## Accessibility & screen reader announcements
+#### Screen reader announcements
 
 Accurate, valid scroll button labels are very likely to give non-visual screen reader users the impression that activating the button will change the content that is available to them. However, the content in the target scroll container is always in the accessibility tree, so activating a scroll button will not create any changes that could be perceived by a non-visual screen reader user. Users will generally expect changes and will thus spend time attempting to discover changes when there are none to discover. This may leave the user with the impression that the page is defective.
 
@@ -135,3 +127,11 @@ In the event that an author needs to override this default behavior, authors wou
 
 1. Declare `aria-live="off"` on the button.
 2. Declare `aria-live` with any value on the scroll container.
+
+#### Internationalization & writing modes
+
+Logical commands (page-inline-start, page-block-end, etc.) ensure that scrolling directions automatically adapt to the document's writing mode. In a Right-to-Left (RTL) context, page-inline-end will correctly scroll to the left, ensuring that "Next" remains semantically and functionally accurate without requiring manual direction logic from the author.
+
+#### Handling multi-axis scrolling
+
+In complex interfaces where a single container supports both horizontal and vertical scrolling, the AT announcement must distinguish between axes to prevent user confusion. When multiple scroll commands target the same commandfor ID, the browser should include the axis in the announcement.A page-inline-end button would be announced as "Next page, horizontal, [Container Name], button."A page-block-end button would be announced as "Next page, vertical, [Container Name], button."
