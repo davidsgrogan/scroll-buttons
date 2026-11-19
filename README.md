@@ -93,10 +93,25 @@ This proposal standardizes declarative scrolling by moving state management from
 The commandfor attribute creates a direct relationship between the button and its scroll container, which the browser must expose to Assistive Technology (AT):
 
 * Implicit aria-controls: The browser maps commandfor="ID" to the aria-controls relationship.
-* Contextual labeling: If the target container has an accessible name (e.g., aria-label="Document Preview"), the browser should propagate this to the button’s announcement. For example, a page-inline-end command would be announced as "Next page, Document Preview, button."
-* Announcement Priority:
-   * If a button has a custom aria-label, the browser should use that label as the primary identifier.
-   * If no custom label exists, the browser generates a name combining the command action and the target container's name (e.g., "Next page, Document Preview, button").
+
+
+#### Implicit naming
+
+If the author does not provide an accessible name for a scroll button,the browser should generate a name for the button based on the command action, language direction, target container role, and target container name as specified in the following table.
+The CONTAINER_NAME and CONTAINER_ROLE should both be omitted from the button name if either:
+* The target container does not have a role that permits naming, such as a `div` or `p`.
+* The target container does not have a name specified.
+
+   Command|LTR accName|RTL accName
+   ---|---|---
+`page-up`|Page Up [CONTAINER_NAME CONTAINER_ROLE]|Same as LTR
+`page-block-start`|Page Up [CONTAINER_NAME CONTAINER_ROLE]|Same as LTR
+`page-down`|Page Down [CONTAINER_NAME CONTAINER_ROLE]|Same as LTR
+`page-block-end`|Page Down [CONTAINER_NAME CONTAINER_ROLE]|Same as LTR
+`page-left`|Page Left [CONTAINER_NAME CONTAINER_ROLE]|Same as LTR
+`page-inline-start`|Page Left [CONTAINER_NAME CONTAINER_ROLE]|Page Right [CONTAINER_NAME CONTAINER_ROLE]
+`page-right`|Page Right [CONTAINER_NAME CONTAINER_ROLE]|Same as LTR
+`page-inline-end`|Page Right [CONTAINER_NAME CONTAINER_ROLE]|Page Left [CONTAINER_NAME CONTAINER_ROLE]
 
 #### State management and styling
 
