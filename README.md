@@ -106,6 +106,28 @@ One of the primary benefits of this declarative approach is automatic state sync
 * Focus preservation: The use of aria-disabled is required over the HTML disabled attribute to ensure the button remains in the Tab order. If the button were strictly disabled via the HTML attribute, a keyboard user would lose their focus point upon reaching the end of the scrollable region, causing the focus to reset to the top of the document.
 * Styling via attribute selectors: Authors can style these states using attribute selectors (e.g., button[aria-disabled="true"]) to provide visual parity with the :disabled pseudo-class while maintaining accessibility.
 
+#### Screen reader announcements
+
+Accurate, valid scroll button labels are very likely to give non-visual screen reader users the impression that activating the button will change the content that is available to them. However, the content in the target scroll container is always in the accessibility tree, so activating a scroll button will not create any changes that could be perceived by a non-visual screen reader user. Those users would generally expect changes to the content and would then spend time attempting to discover changes when there are none to discover.
+
+A button that is functioning correctly but appears to be broken creates serious user experience problems. Thus, it is important to help non-visual users understand what activating the button is doing and what it is not doing. Helping non-visual users understand that the content available to them is not changing as a result of activating the button should reduce the likelihood that users will think the page is broken.
+
+The proposal for achieving this is to provide an informative announcement via the ariaNotify API when a scroll button is activated. The objective of the announcement is to help non-visual users understand what has changed, and very importantly, what has not changed. 
+
+The format of the announcement string is:
+>Visible [horizontal|vertical] scroll [of CONTAINER_NAME CONTAINER_ROLE] changed to x%. The screen reader view did not change.
+
+If the target container does not have a name and role, those parts of the announcement would be omitted.
+
+For example, a page-block-end command for a target with an accessible name "Document Preview" that changed the vertical scroll position to 25% would generate the following announcement:
+
+>Visible vertical scroll of Document Preview region changed to 25%. The screen reader view did not change.
+
+In the event that an author needs to override this default behavior, authors would have two ways of telling browsers not to make the automatic announcements:
+
+1. Declare `aria-live="off"` on the button.
+2. Declare `aria-live` with any value on the scroll container.
+
 #### Internationalization & writing modes
 
 Logical commands (page-inline-start, page-block-end, etc.) ensure that scrolling directions automatically adapt to the document's writing mode. In a Right-to-Left (RTL) context, page-inline-end will correctly scroll to the left, ensuring that "Next" remains semantically and functionally accurate without requiring manual direction logic from the author.
@@ -113,78 +135,3 @@ Logical commands (page-inline-start, page-block-end, etc.) ensure that scrolling
 #### Handling multi-axis scrolling
 
 In complex interfaces where a single container supports both horizontal and vertical scrolling, the AT announcement must distinguish between axes to prevent user confusion. When multiple scroll commands target the same commandfor ID, the browser should include the axis in the announcement.A page-inline-end button would be announced as "Next page, horizontal, [Container Name], button."A page-block-end button would be announced as "Next page, vertical, [Container Name], button."
-
-## Accessibility & screen reader announcements
-When introducing declarative scroll commands, a key accessibility challenge arises: how do we announce newly visible content to screen reader users without requiring JavaScript? Currently, moving the visual viewport via scrolling does not automatically trigger an announcement. If a user clicks a `command="page-inline-end"` button on a carousel, the visual state changes, but the screen reader remains silent unless focus is explicitly moved.
-
-### Currently possible solution: `scrollsnapchange`
-Historically, developers had to rely on complex IntersectionObserver math and scrollend events to detect which item was currently visible, and then manually inject its accessible name into an aria-live region.
-With the recent introduction of the [`scrollsnapchange`](https://developer.mozilla.org/en-US/docs/Web/API/Document/scrollsnapchange_event) event, the calculation step is much easier, but JavaScript is still required to bridge the visual state to the semantic state:
-```HTML
-<div aria-live="polite" class="sr-only" id="scroll-announcer"></div>
-
-<button commandfor="gallery" command="page-inline-end">Next Image</button>
-
-<div id="gallery" style="scroll-snap-type: x mandatory; overflow-x: auto;">
-  <img src="1.jpg" alt="A red cat" class="snap-item">
-  <img src="2.jpg" alt="A blue dog" class="snap-item">
-</div>
-
-<script>
-  // JS is still required to trigger the announcement
-  document.getElementById('gallery').addEventListener('scrollsnapchange', (e) => {
-    const announcer = document.getElementById('scroll-announcer');
-    announcer.textContent = `Showing: ${e.snapTargetInline.alt}`; 
-  });
-</script>
-```
-
-So just relying on JavaScript for basic accessibility announcements leaves a significant gap in this proposal. Also, this approach won't work for non-snappable scroll containers.
-
-### Proposed extension: declarative live regions (`aria-live-source`)
-To make scroll-driven components fully declarative and accessible out of the box, this explainer proposes extending the aria-live API with a new attribute: `aria-live-source`.
-This attribute allows an author to bind a live region directly to a scrollable container.
-```HTML
-<!-- The live region subscribes directly to the scroller's state -->
-<div aria-live="polite" aria-live-source="gallery" class="sr-only"></div>
-
-<button commandfor="gallery" command="page-inline-end">Next Image</button>
-
-<div id="gallery" style="overflow-x: auto;">
-  <!-- ... images ... -->
-</div>
-```
-
-#### How it works under the hood
-When a user triggers a scroll command and the scroll completes, the browser handles the announcement natively:
-1. **Determine the active element:** The browser engine determines which child of the scroller is currently "active." To calculate this, the browser can reuse the exact same intersection heuristics defined for the [:target-current pseudo-class in CSS Overflow 5](https://www.w3.org/TR/css-overflow-5/#example-d2ca6884). This handles both scroll-snap containers (using the snap target) and standard overflow containers (using visibility/intersection percentages).
-2. **Extract the name:** The browser extracts the Accessible Name of that active element (e.g., the alt text of an image, or the aria-label of a card).
-3. **Update the AX tree:** The browser internally updates the Accessibility Tree node of the live region with this extracted text, bypassing the DOM entirely.
-4. **Fire platform events:** The browser fires the standard platform accessibility event for a live region mutation, as it would do with a manual change from JS (e.g., EVENT_OBJECT_LIVEREGIONCHANGED on Windows/UIA, AXLiveRegionChanged on macOS).
-
-#### Pros
-* **No changes of AX API consumers required:** This declarative binding requires zero changes to Operating System Accessibility APIs or third-party Screen Readers. Because the browser handles the targeting calculation internally and fires the exact same platform-level LiveRegionChanged events already used for standard DOM mutations, the entire downstream Assistive Technology ecosystem will support this feature without any changes.
-* **Author control over a live region**: An author can decide if subscription is needed or not, depending on the context.
-* **Algorithm unification**: By reusing the same algo as for the `:target-current` pseudo-class we unify the common patterns.
-
-#### Cons/Things to consider
-* **The DOM vs. AX Tree "desync"**: Historically, the DOM is the absolute source of truth. If a screen reader says "Hello", the word "Hello" usually exists somewhere in the DOM (either as text content, an aria-label, etc.). With aria-live-source, the actual HTML inside the `<div aria-live>` remains empty in the DOM, but the browser artificially injects text into the Accessibility Tree. It creates "magic" behavior happening exclusively in the browser's accessibility engine.
-* **The "Focus disconnect"**: Screen reader users generally expect that if an item is explicitly announced as the "current" context, they can immediately interact with it, but aria-live-source only announces the content; it doesn't move the user's virtual reading cursor. It solves the awareness problem, but not the interaction problem.
-* **Lack of customization**: When developers write JavaScript to populate live regions, they usually add context. Instead of just announcing "A red cat," they will script it to say "Image 2 of 5: A red cat.". If the browser automates this by extracting the Accessible Name of the "active" element, it will only announce "A red cat." Authors lose the ability to format, localize, or inject contextual data into the announcement.
->We would either have to accept that these announcements are strictly limited to the element's raw name, or we would have to invent another complex attribute (like aria-live-format="Item {index} of {total}: {name}") which vastly inflates the scope of the proposal.
-
-#### Extra thoughts/Possible extensions
-* **Multiple elements announcement**: We could consider extending the subscription with some parameter to include only the first "active" element in the announcement or all of the visible ones.
-* **Combining aria-live text to announcement**: We could consider taking the text inside the `aria-live` element to concat it with a browser-genereted announcement.
-* **A `scrollactivechange` event**: Instead of a fully declarative attribute that bypasses the DOM, the platform could expose the `:target-current` heuristics directly to JavaScript via a new event (e.g., `scrollactivechange`). This would apply to all scrollers, not just those using scroll-snap.
-```JavaScript
-gallery.addEventListener('scrollactivechange', (e) => {
-  // The browser natively calculates the most prominent item
-  const activeItem = e.activeElements[0]; 
-
-  // Developer has full flexibility to add formatting/context
-  announcer.textContent = `Image ${activeItem.dataset.index} of 10: ${activeItem.alt}`;
-});
-```
-This abandons the zero JS idea of the proposal and goes away from the pure AX solution, but gives more control over the formatting of an announcement.
-> Probably we could even combine the two? E.g. use `aria-live-source` if no flexibility is needed and use the event one otherwise?
