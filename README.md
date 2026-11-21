@@ -97,10 +97,13 @@ The commandfor attribute creates a direct relationship between the button and it
 
 #### Implicit naming
 
-If the author does not provide an accessible name for a scroll button,the browser should generate a name for the button based on the command action, language direction, target container role, and target container name as specified in the following table.
+If the author does not provide an accessible name for a scroll button,the browser should generate a name for the button based on the command action, text direction, writing mode, target container role, and target container name.  
+
 The CONTAINER_NAME and CONTAINER_ROLE should both be omitted from the button name if either:
 * The target container does not have a role that permits naming, such as a `div` or `p`.
 * The target container does not have a name specified.
+
+The following table shows how names would be composed when the writing mode is `horizontal-tb`.
 
    Command|LTR accName|RTL accName
    ---|---|---
@@ -112,6 +115,11 @@ The CONTAINER_NAME and CONTAINER_ROLE should both be omitted from the button nam
 `page-inline-start`|Page Left [CONTAINER_NAME CONTAINER_ROLE]|Page Right [CONTAINER_NAME CONTAINER_ROLE]
 `page-right`|Page Right [CONTAINER_NAME CONTAINER_ROLE]|Same as LTR
 `page-inline-end`|Page Right [CONTAINER_NAME CONTAINER_ROLE]|Page Left [CONTAINER_NAME CONTAINER_ROLE]
+
+Other writing modes (`vertical-rl`, `vertical-lr`,
+`sideways-rl`, and `sideways-lr`) will require similar
+tables that account for their respective inline and
+block directions.
 
 #### State management and styling
 
