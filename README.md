@@ -93,10 +93,33 @@ This proposal standardizes declarative scrolling by moving state management from
 The commandfor attribute creates a direct relationship between the button and its scroll container, which the browser must expose to Assistive Technology (AT):
 
 * Implicit aria-controls: The browser maps commandfor="ID" to the aria-controls relationship.
-* Contextual labeling: If the target container has an accessible name (e.g., aria-label="Document Preview"), the browser should propagate this to the button’s announcement. For example, a page-inline-end command would be announced as "Next page, Document Preview, button."
-* Announcement Priority:
-   * If a button has a custom aria-label, the browser should use that label as the primary identifier.
-   * If no custom label exists, the browser generates a name combining the command action and the target container's name (e.g., "Next page, Document Preview, button").
+
+
+#### Implicit naming
+
+If the author does not provide an accessible name for a scroll button,the browser should generate a name for the button based on the command action, text direction, writing mode, target container role, and target container name.  
+
+The CONTAINER_NAME and CONTAINER_ROLE should both be omitted from the button name if either:
+* The target container does not have a role that permits naming, such as a `div` or `p`.
+* The target container does not have a name specified.
+
+The following table shows how names would be composed when the writing mode is `horizontal-tb`.
+
+   Command|LTR accName|RTL accName
+   ---|---|---
+`page-up`|Page Up [CONTAINER_NAME CONTAINER_ROLE]|Same as LTR
+`page-block-start`|Page Up [CONTAINER_NAME CONTAINER_ROLE]|Same as LTR
+`page-down`|Page Down [CONTAINER_NAME CONTAINER_ROLE]|Same as LTR
+`page-block-end`|Page Down [CONTAINER_NAME CONTAINER_ROLE]|Same as LTR
+`page-left`|Page Left [CONTAINER_NAME CONTAINER_ROLE]|Same as LTR
+`page-inline-start`|Page Left [CONTAINER_NAME CONTAINER_ROLE]|Page Right [CONTAINER_NAME CONTAINER_ROLE]
+`page-right`|Page Right [CONTAINER_NAME CONTAINER_ROLE]|Same as LTR
+`page-inline-end`|Page Right [CONTAINER_NAME CONTAINER_ROLE]|Page Left [CONTAINER_NAME CONTAINER_ROLE]
+
+Other writing modes (`vertical-rl`, `vertical-lr`,
+`sideways-rl`, and `sideways-lr`) will require similar
+tables that account for their respective inline and
+block directions.
 
 #### State management and styling
 
@@ -131,7 +154,3 @@ In the event that an author needs to override this default behavior, authors wou
 #### Internationalization & writing modes
 
 Logical commands (page-inline-start, page-block-end, etc.) ensure that scrolling directions automatically adapt to the document's writing mode. In a Right-to-Left (RTL) context, page-inline-end will correctly scroll to the left, ensuring that "Next" remains semantically and functionally accurate without requiring manual direction logic from the author.
-
-#### Handling multi-axis scrolling
-
-In complex interfaces where a single container supports both horizontal and vertical scrolling, the AT announcement must distinguish between axes to prevent user confusion. When multiple scroll commands target the same commandfor ID, the browser should include the axis in the announcement.A page-inline-end button would be announced as "Next page, horizontal, [Container Name], button."A page-block-end button would be announced as "Next page, vertical, [Container Name], button."
