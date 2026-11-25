@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Test 5: Horizontal scrolling, mandatory snapping, pages of two cards</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav aria-label="Test navigation"><a href="./">All tests</a> | <a href="horizontal-snap.html">Previous test</a> | <a href="horizontal-snap-proximity.html">Next test</a></nav>
+  <main>
+    <h1>Test 5: Horizontal scrolling, mandatory snapping, pages of two cards</h1>
+    <p>This is a typical carousel. The scroll container holds 10 cards in a single row. Each card is half the container width, so exactly two cards are visible at a time. Scroll snapping is mandatory (scroll-snap-type: x mandatory), but only the odd-numbered cards (1, 3, 5, 7, 9) are snap points. The container therefore always rests on a “page” of two cards: 1 and 2, 3 and 4, and so on. The scroll container has no role, name, or tabindex, like
+    most scroll containers on the web. There are no scroll buttons on this page.</p>
+
+    <h2>Before the scroll container</h2>
+    <p>This paragraph is outside the scroll container. Start reading here, then move the
+    reading cursor forward into the cards below.</p>
+
+    <h2>Cards</h2>
+    <div class="scroller horizontal half-widths snap-mandatory snap-odd">
+      <article class="card" data-name="Card 1">
+        <h3>Card 1</h3>
+        <p>This is the first paragraph of card 1.</p>
+        <p>This is the second paragraph of card 1.</p>
+      </article>
+      <article class="card" data-name="Card 2">
+        <h3>Card 2</h3>
+        <p>This is the first paragraph of card 2.</p>
+        <p>This is the second paragraph of card 2.</p>
+      </article>
+      <article class="card" data-name="Card 3">
+        <h3>Card 3</h3>
+        <p>This is the first paragraph of card 3.</p>
+        <p>This is the second paragraph of card 3.</p>
+      </article>
+      <article class="card" data-name="Card 4">
+        <h3>Card 4</h3>
+        <p>This is the first paragraph of card 4.</p>
+        <p>This is the second paragraph of card 4.</p>
+      </article>
+      <article class="card" data-name="Card 5">
+        <h3>Card 5</h3>
+        <p>This is the first paragraph of card 5.</p>
+        <p>This is the second paragraph of card 5.</p>
+      </article>
+      <article class="card" data-name="Card 6">
+        <h3>Card 6</h3>
+        <p>This is the first paragraph of card 6.</p>
+        <p>This is the second paragraph of card 6.</p>
+      </article>
+      <article class="card" data-name="Card 7">
+        <h3>Card 7</h3>
+        <p>This is the first paragraph of card 7.</p>
+        <p>This is the second paragraph of card 7.</p>
+      </article>
+      <article class="card" data-name="Card 8">
+        <h3>Card 8</h3>
+        <p>This is the first paragraph of card 8.</p>
+        <p>This is the second paragraph of card 8.</p>
+      </article>
+      <article class="card" data-name="Card 9">
+        <h3>Card 9</h3>
+        <p>This is the first paragraph of card 9.</p>
+        <p>This is the second paragraph of card 9.</p>
+      </article>
+      <article class="card" data-name="Card 10">
+        <h3>Card 10</h3>
+        <p>This is the first paragraph of card 10.</p>
+        <p>This is the second paragraph of card 10.</p>
+      </article>
+    </div>
+
+    <h2>After the scroll container</h2>
+    <p>This paragraph is outside the scroll container, after the last card.</p>
+
+    <h2>Scroll log</h2>
+    <p>Each time the scroll container stops scrolling, or focus moves inside it, an entry is
+    added to the end of this list. You can read the log after moving through the cards.</p>
+    <p>Current position: <span id="status">Not measured yet.</span></p>
+    <p>
+      <button type="button" id="copy-log">Copy log</button>
+      <button type="button" id="reset">Scroll back to start and clear log</button>
+      <span id="copy-result" role="status"></span>
+    </p>
+    <ol id="log"></ol>
+
+    <h2>What to try</h2>
+    <ul>
+      <li>Move the reading cursor line by line (for example Down Arrow in JAWS or NVDA browse mode, Control+Option+Right Arrow in VoiceOver on macOS, swipe right in VoiceOver on iOS or TalkBack).</li>
+      <li>Jump between card headings with heading navigation (for example H in JAWS or NVDA, or the headings rotor in VoiceOver).</li>
+      <li>Read continuously from the top of the page (say all).</li>
+    </ul>
+
+    <h2>What to check</h2>
+    <ul>
+      <li>While the reading cursor is on cards 1 and 2, does the visible area stay put?</li>
+      <li>When the reading cursor reaches card 3, does the container scroll to show cards 3 and 4 together?</li>
+      <li>When the reading cursor reaches card 4, does the container stay on cards 3 and 4, or does it try to scroll and fight the snapping?</li>
+      <li>Does the container ever come to rest part way through a page?</li>
+    </ul>
+    <p>Please report results in a comment on <a href="https://github.com/davidsgrogan/scroll-buttons/issues/4">issue 4</a>, and include the
+    copied log.</p>
+  </main>
+  <script src="scroll-log.js"></script>
+</body>
+</html>

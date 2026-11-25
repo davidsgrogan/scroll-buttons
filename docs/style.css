@@ -1,0 +1,100 @@
+/* Shared styles for the issue #4 screen reader scrolling tests. */
+
+body {
+  font-family: system-ui, sans-serif;
+  line-height: 1.5;
+  margin: 1rem;
+}
+
+main {
+  max-width: 40rem;
+}
+
+.scroller {
+  border: 3px solid #333;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.card {
+  box-sizing: border-box;
+  border: 2px solid #666;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  background: #f4f4f4;
+}
+
+.card h3 {
+  margin: 0;
+  font-size: 2.5rem;
+  line-height: 1.1;
+}
+
+.card p {
+  margin: 0.5rem 0 0;
+}
+
+/* Alternate card colors so the boundaries are obvious in screenshots. */
+.card:nth-child(even) {
+  background: #dde8f6;
+}
+
+/* Vertical containers. */
+.scroller.vertical {
+  height: 20rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.scroller.vertical .card {
+  flex: 0 0 auto;
+}
+
+.scroller.vertical.one-per-view .card {
+  flex: 0 0 100%;
+}
+
+/* Horizontal containers. */
+.scroller.horizontal {
+  overflow-x: auto;
+  overflow-y: hidden;
+  display: flex;
+  gap: 1rem;
+}
+
+.scroller.horizontal.no-snap-widths .card {
+  flex: 0 0 40%;
+}
+
+.scroller.horizontal.half-widths .card {
+  flex: 0 0 calc((100% - 1rem) / 2);
+}
+
+/* Snapping. */
+.scroller.vertical.snap-mandatory {
+  scroll-snap-type: y mandatory;
+}
+
+.scroller.horizontal.snap-mandatory {
+  scroll-snap-type: x mandatory;
+}
+
+.scroller.horizontal.snap-proximity {
+  scroll-snap-type: x proximity;
+}
+
+.scroller.snap-every .card {
+  scroll-snap-align: start;
+}
+
+.scroller.snap-odd .card:nth-child(odd) {
+  scroll-snap-align: start;
+}
+
+#log {
+  font-family: ui-monospace, monospace;
+  font-size: 0.9rem;
+}

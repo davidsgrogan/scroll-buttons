@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Test 7: Horizontal scrolling, pages of two cards, with a link in each card</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav aria-label="Test navigation"><a href="./">All tests</a> | <a href="horizontal-snap-proximity.html">Previous test</a></nav>
+  <main>
+    <h1>Test 7: Horizontal scrolling, pages of two cards, with a link in each card</h1>
+    <p>This is the same carousel as the “pages of two cards” test (10 cards, two visible at a time, mandatory snapping on odd-numbered cards). The only difference is that each card ends with a link, so the cards contain focusable content. This tests whether screen readers or browsers behave differently when focus moves (for example when tabbing, or when the screen reader moves focus along with the reading cursor). The scroll container has no role, name, or tabindex, like
+    most scroll containers on the web. There are no scroll buttons on this page.</p>
+
+    <h2>Before the scroll container</h2>
+    <p>This paragraph is outside the scroll container. Start reading here, then move the
+    reading cursor forward into the cards below.</p>
+
+    <h2>Cards</h2>
+    <div class="scroller horizontal half-widths snap-mandatory snap-odd">
+      <article class="card" data-name="Card 1">
+        <h3>Card 1</h3>
+        <p>This is the first paragraph of card 1.</p>
+        <p>This is the second paragraph of card 1.</p>
+        <p><a href="?card=1">Details about card 1</a></p>
+      </article>
+      <article class="card" data-name="Card 2">
+        <h3>Card 2</h3>
+        <p>This is the first paragraph of card 2.</p>
+        <p>This is the second paragraph of card 2.</p>
+        <p><a href="?card=2">Details about card 2</a></p>
+      </article>
+      <article class="card" data-name="Card 3">
+        <h3>Card 3</h3>
+        <p>This is the first paragraph of card 3.</p>
+        <p>This is the second paragraph of card 3.</p>
+        <p><a href="?card=3">Details about card 3</a></p>
+      </article>
+      <article class="card" data-name="Card 4">
+        <h3>Card 4</h3>
+        <p>This is the first paragraph of card 4.</p>
+        <p>This is the second paragraph of card 4.</p>
+        <p><a href="?card=4">Details about card 4</a></p>
+      </article>
+      <article class="card" data-name="Card 5">
+        <h3>Card 5</h3>
+        <p>This is the first paragraph of card 5.</p>
+        <p>This is the second paragraph of card 5.</p>
+        <p><a href="?card=5">Details about card 5</a></p>
+      </article>
+      <article class="card" data-name="Card 6">
+        <h3>Card 6</h3>
+        <p>This is the first paragraph of card 6.</p>
+        <p>This is the second paragraph of card 6.</p>
+        <p><a href="?card=6">Details about card 6</a></p>
+      </article>
+      <article class="card" data-name="Card 7">
+        <h3>Card 7</h3>
+        <p>This is the first paragraph of card 7.</p>
+        <p>This is the second paragraph of card 7.</p>
+        <p><a href="?card=7">Details about card 7</a></p>
+      </article>
+      <article class="card" data-name="Card 8">
+        <h3>Card 8</h3>
+        <p>This is the first paragraph of card 8.</p>
+        <p>This is the second paragraph of card 8.</p>
+        <p><a href="?card=8">Details about card 8</a></p>
+      </article>
+      <article class="card" data-name="Card 9">
+        <h3>Card 9</h3>
+        <p>This is the first paragraph of card 9.</p>
+        <p>This is the second paragraph of card 9.</p>
+        <p><a href="?card=9">Details about card 9</a></p>
+      </article>
+      <article class="card" data-name="Card 10">
+        <h3>Card 10</h3>
+        <p>This is the first paragraph of card 10.</p>
+        <p>This is the second paragraph of card 10.</p>
+        <p><a href="?card=10">Details about card 10</a></p>
+      </article>
+    </div>
+
+    <h2>After the scroll container</h2>
+    <p>This paragraph is outside the scroll container, after the last card.</p>
+
+    <h2>Scroll log</h2>
+    <p>Each time the scroll container stops scrolling, or focus moves inside it, an entry is
+    added to the end of this list. You can read the log after moving through the cards.</p>
+    <p>Current position: <span id="status">Not measured yet.</span></p>
+    <p>
+      <button type="button" id="copy-log">Copy log</button>
+      <button type="button" id="reset">Scroll back to start and clear log</button>
+      <span id="copy-result" role="status"></span>
+    </p>
+    <ol id="log"></ol>
+
+    <h2>What to try</h2>
+    <ul>
+      <li>Move the reading cursor line by line (for example Down Arrow in JAWS or NVDA browse mode, Control+Option+Right Arrow in VoiceOver on macOS, swipe right in VoiceOver on iOS or TalkBack).</li>
+      <li>Jump between card headings with heading navigation (for example H in JAWS or NVDA, or the headings rotor in VoiceOver).</li>
+      <li>Read continuously from the top of the page (say all).</li>
+      <li>Tab and Shift+Tab between the links in the cards.</li>
+    </ul>
+
+    <h2>What to check</h2>
+    <ul>
+      <li>Tab through the links. Does the container scroll so that the focused link&#x27;s card is visible? Does it come to rest on a page of two cards?</li>
+      <li>Move through the cards with the reading cursor instead of Tab. Does focus follow the reading cursor (the scroll log will say “Focus moved to”)? Is the scrolling different from the test without links?</li>
+    </ul>
+    <p>Please report results in a comment on <a href="https://github.com/davidsgrogan/scroll-buttons/issues/4">issue 4</a>, and include the
+    copied log.</p>
+  </main>
+  <script src="scroll-log.js"></script>
+</body>
+</html>
