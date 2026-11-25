@@ -4,9 +4,6 @@ body {
   font-family: system-ui, sans-serif;
   line-height: 1.5;
   margin: 1rem;
-}
-
-main {
   max-width: 40rem;
 }
 
@@ -24,7 +21,7 @@ main {
   background: #f4f4f4;
 }
 
-.card h3 {
+.card h2 {
   margin: 0;
   font-size: 2.5rem;
   line-height: 1.1;
@@ -91,6 +88,13 @@ main {
 }
 
 .scroller.snap-odd .card:nth-child(odd) {
+  scroll-snap-align: start;
+}
+
+/* Chrome's proximity range is a third of the scroller's width, so snap points
+   must be more than two thirds of the width apart for proximity to ever leave
+   the container between them. */
+.scroller.snap-third .card:nth-child(3n+1) {
   scroll-snap-align: start;
 }
 

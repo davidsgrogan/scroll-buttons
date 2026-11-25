@@ -7,63 +7,14 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <main>
-    <h1>Screen reader scrolling tests</h1>
-    <p>These pages support <a href="https://github.com/davidsgrogan/scroll-buttons/issues/4">issue 4: Evaluate utility of declarative
-    scroll buttons for screen reader users</a>.</p>
-
-    <h2>Purpose</h2>
-    <p>Content in a scroll container is always in the accessibility tree, so screen reader
-    users can read all of it without scrolling. Screen reader users who also look at the
-    screen benefit when the visible area follows the reading cursor. If screen readers
-    already scroll content into view as the reading cursor moves, scroll buttons add little
-    for those users.</p>
-    <p>These tests check whether moving the reading cursor (and, in one test, focus)
-    changes the scroll position of a scroll container, and whether that scrolling respects
-    scroll snapping. None of the pages have scroll buttons; each has an ordinary scroll
-    container with a normal scroll bar.</p>
-
-    <h2>Tests</h2>
-    <ol>
-      <li><a href="vertical.html">Test 1: Vertical scrolling, no snapping</a></li>
-      <li><a href="vertical-snap.html">Test 2: Vertical scrolling, mandatory snapping, one card per page</a></li>
-      <li><a href="horizontal.html">Test 3: Horizontal scrolling, no snapping</a></li>
-      <li><a href="horizontal-snap.html">Test 4: Horizontal scrolling, mandatory snapping on every card</a></li>
-      <li><a href="horizontal-snap-pages.html">Test 5: Horizontal scrolling, mandatory snapping, pages of two cards</a></li>
-      <li><a href="horizontal-snap-proximity.html">Test 6: Horizontal scrolling, proximity snapping</a></li>
-      <li><a href="horizontal-snap-pages-links.html">Test 7: Horizontal scrolling, pages of two cards, with a link in each card</a></li>
-    </ol>
-
-    <h2>Screen reader and browser combinations</h2>
-    <ul>
-      <li>VoiceOver on macOS with Chrome and with Safari</li>
-      <li>JAWS with Chrome and with Firefox</li>
-      <li>NVDA with Chrome and with Firefox</li>
-      <li>Narrator with Edge</li>
-      <li>VoiceOver on iOS with Safari</li>
-      <li>TalkBack with Chrome</li>
-    </ul>
-    <p>For VoiceOver on macOS, note whether cursor tracking is on or off
-    (Control+Option+Shift+F3 toggles it).</p>
-
-    <h2>Reading the results</h2>
-    <p>Each test page has a scroll log after the scroll container. The page adds an entry
-    when the container stops scrolling, saying which cards are fully or partly visible, and
-    when focus moves inside the container. It is not a live region, so it does not
-    interrupt the screen reader. Read it, or use the Copy log button, after moving through
-    the cards. The copied log includes the browser's user agent string.</p>
-    <p>Note that a page cannot see where a screen reader's reading cursor is. The log
-    records only what the browser scrolled and where focus went. The cards show large
-    numbers so that screenshots also show which cards are visible.</p>
-
-    <h2>Reporting</h2>
-    <p>Post results as a comment on <a href="https://github.com/davidsgrogan/scroll-buttons/issues/4">issue 4</a>. For each run, include:</p>
-    <ul>
-      <li>Screen reader and version, browser and version, and operating system</li>
-      <li>Relevant settings, such as VoiceOver cursor tracking or verbosity</li>
-      <li>The test number and the navigation method used</li>
-      <li>What happened, and the copied scroll log</li>
-    </ul>
-  </main>
+  <h1>Screen reader scrolling tests</h1>
+  <ol>
+    <li><a href="vertical.html">Vertical, no snapping</a></li>
+    <li><a href="vertical-snap.html">Vertical, mandatory snapping</a></li>
+    <li><a href="horizontal.html">Horizontal, no snapping</a></li>
+    <li><a href="horizontal-snap.html">Horizontal, mandatory snapping</a></li>
+    <li><a href="horizontal-snap-pages.html">Horizontal, snapping in pairs</a></li>
+    <li><a href="horizontal-snap-proximity.html">Horizontal, proximity snapping</a></li>
+  </ol>
 </body>
 </html>
